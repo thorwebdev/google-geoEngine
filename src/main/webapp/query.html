@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Query</title>
+
+    <style>
+        html, body, #map_canvas {
+            height: 100%;
+            margin: 0px;
+            padding: 0px
+        }
+        #log {
+            position: absolute; background: rgba(255, 255, 255, 0.8); z-index: 1000; top: 31px; right: 5px; padding: 15px; text-align: right
+        }
+        #metadata {
+            display: none;
+        }
+    </style>
+
+    <!-- JS -->
+    <!-- Maps API -->
+    <script src="http://maps.googleapis.com/maps/api/js?libraries=geometry,visualization,drawing"></script>
+    <!-- Google Client API -->
+    <script src="https://apis.google.com/js/client.js"></script>
+    <!-- my JS -->
+    <script src="js/GEOJSON.js"></script>
+
+    <script>
+        //Global vars
+        var map, mapOptions;
+        var zoomLevel = 2;
+        var centerLatLng = new google.maps.LatLng(23.6, 13.4); //center of world
+        var polyCollection = [];
+        var test = [];
+        var globalGroup = "test";
+        var vertices;
+
+        //run init function when window loaded
+        google.maps.event.addDomListener(window, 'load', init);
+
+        function init(){
+            //initialize geofencing api
+            var ROOT = 'https://'+window.location.host+'/_ah/api';
+            gapi.client.load('geofencing', 'v1', function() {
+                console.log('loaded')
+            }, ROOT);
+
+            //create map
+            mapOptions = {
+                zoom: zoomLevel,
+                center: centerLatLng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById('map_canvas'),
+                    mapOptions);
+
+            //initialize drawing manager
+            drawingManager = new google.maps.drawing.DrawingManager({
+                drawingMode: null,
+                drawingControl: true,
+                drawingControlOptions: {
+                    position: google.maps.ControlPosition.TOP_LEFT,
+                    drawingModes: [
+                        google.maps.drawing.OverlayType.POLYGON,
+                        google.maps.drawing.OverlayType.POLYLINE
+                    ]
+                },
+                polygonOptions: {
+                    fillOpacity: 0
+                }
+            });
+            drawingManager.setMap(map);
+
+            //drawing events
+            google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
+                var vertices = [];
+                polygon.getPaths().getAt(0).forEach(function(element){
+                    vertices.push([element.lng(),element.lat()]);
+                });
+                vertices.push(vertices[0]);
+                //query
+                gapi.client.geofencing.polygon({
+                    group: document.querySelector('#groupName').value,
+                    coordinates: vertices
+                }).execute(function(resp) {
+                    console.log(vertices);
+                    console.log(resp);
+                    if(resp.items){
+                        resp.items.forEach(function(item){
+                            map.data.overrideStyle(polyCollection[item.id],{fillOpacity:0.3});
+                        });
+                    }
+                });
+            });
+
+            google.maps.event.addListener(drawingManager, 'polylinecomplete', function (line) {
+                var coordinates = [];
+                line.getPath().forEach(function(element){
+                    coordinates.push([element.lng(),element.lat()]);
+                });
+                gapi.client.geofencing.polyline({
+                    group: document.querySelector('#groupName').value,
+                    coordinates: coordinates
+                }).execute(function(resp) {
+                    console.log(coordinates);
+                    console.log(resp);
+                    if(resp.items){
+                        resp.items.forEach(function(item){
+                            map.data.overrideStyle(polyCollection[item.id],{fillOpacity:0.3});
+                        });
+                    }
+                });
+            });
+
+            //click event
+            google.maps.event.addListener(map, 'click', function( event ){
+                console.log( "["+event.latLng.lng()+","+event.latLng.lat()+"]" );
+                var lat = event.latLng.lat();
+                var lng = event.latLng.lng();
+                gapi.client.geofencing.point({group:document.querySelector('#groupName').value,lat:lat,lng:lng}).execute(function(resp) {
+                    console.log(resp);
+                    if(resp.items){
+                        resp.items.forEach(function(item){
+                            map.data.overrideStyle(polyCollection[item.id],{fillOpacity:0.3});
+                        });
+                    }
+                });
+            });
+        }
+
+        //FUNCTIONS
+        //get groups fences
+        function getPolys(group){
+            polyCollection.forEach(function(feature){
+                map.data.remove(feature);
+            });
+            map.data.setStyle({
+                clickable: false,
+                fillOpacity: 0
+            });
+            gapi.client.geofencing.list({"group":group}).execute(function(resp) {
+                resp.items.forEach(function(fence){
+                    var gj = new GEOJSON.Polygon({id:fence.id,name:fence.name,description:fence.description},fence.vertices);
+                    //TODO make polygons unclickable
+                    var feature = map.data.addGeoJson(gj);
+                    //polyCollection[fence.id] = gj;
+                    polyCollection[fence.id] = feature[0];
+                    test[fence.id] = "THERE";
+                });
+            });
+        }
+
+        //add a geofence
+        function addFence(options, callback){
+            //options example {"group":STRING ,"name":STRING , "description":STRING ,"vertices": DOUBLE[][] }
+            gapi.client.geofencing.add(options).execute(function(resp) {
+                callback(resp);
+            });
+        }
+
+        //safe
+        function saveFence(group, name, description){
+            document.querySelector("#metadata").style.display = "none";
+            addFence({
+                group:group,
+                name:name,
+                description: description,
+                vertices:vertices
+            },function(resp){
+                alert("Saved with id: " + resp.id);
+            });
+        }
+    </script>
+
+</head>
+<body>
+    <!-- MAP -->
+    <div id="map_canvas"></div>
+    <div id="log">
+        <input type="text" id="groupName" placeholder="Group" value="test"/>
+        <br />
+        <button onclick="getPolys(document.querySelector('#groupName').value)">
+            Get Group
+        </button>
+        <div id="metadata">
+            <input id="name" type="text" placeholder="Name"/>
+            <br />
+            <textarea id="description" placeholder="Description"></textarea>
+            <br />
+            <button onclick="saveFence(document.querySelector('#groupName').value, document.querySelector('#name').value, document.querySelector('#description').value)">
+                Save
+            </button>
+        </div>
+    </div>
+</body>
+</html>
