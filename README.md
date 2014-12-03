@@ -16,7 +16,7 @@ For a detailed explanation of the architecture please refer to this [Google Deve
 - __polygon__: Get all fences that aren't disjoint with a certain polygon.
 - __polyline__: Get all fences that intersect with a certain polyline.
 
-## TEST & Deploy to App Engine
+## Test & Deploy to App Engine
 
 1. Update the value of `application` in `src/main/webapp/WEB-INF/appengine-web.xml` to the app
    ID you have registered in the App Engine admin console and would
@@ -64,7 +64,7 @@ since this automatically creates indexes that are needed for our Datastore queri
 [2]: http://java.com/en/
 [3]: https://developers.google.com/appengine/docs/java/endpoints/
 [4]: https://developers.google.com/appengine/docs/java/tools/maven
-[5]: https://localhost:8080/_ah/api/explorer
+[5]: localhost:8080/_ah/api/explorer
 [6]: https://console.developers.google.com/
 [7]: http://www.vividsolutions.com/jts/JTSHome.htm
 [8]: http://googledevelopers.blogspot.co.uk/
