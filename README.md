@@ -22,7 +22,7 @@ For a detailed explanation of the architecture please refer to this [Google Deve
    ID you have registered in the App Engine admin console and would
    like to use to host your instance of this sample.
 
-1. Optional step: These sub steps are not required but you need this
+1. **__Optional step:__** These sub steps are not required but you need this
    if you want to have auth protected methods.
 
     2. Update the values in `src/main/java/com/google/appengine/geo/fencing/Constants.java`
@@ -37,7 +37,7 @@ For a detailed explanation of the architecture please refer to this [Google Deve
    running by visiting your local server (by
    default [localhost:8080][5].)
 
-1. Get the client library with
+1. **__Optional step:__** Get the client library with
 
    `$ mvn appengine:endpoints_get_client_lib`
 
@@ -45,6 +45,10 @@ For a detailed explanation of the architecture please refer to this [Google Deve
    `target/endpoints-client-libs/<api-name>/target` directory of your
    project, as well as install the artifact into your local maven
    repository.
+   
+   For more information on client libraries see:
+   -[Generating Cleint Libraries][11]
+   -[Client Library for JavaScript][10]
 
 1. Deploy your application to Google App Engine with
 
@@ -52,7 +56,7 @@ For a detailed explanation of the architecture please refer to this [Google Deve
    
    *Please note that you should always first test on the development server since that creates indexes for our datastore queries. Also after the first deployment App Engine takes a while to create the necessary indexes and connections, so if you get errors, just wait for a bit.*
    
-## Example of using the JavaScript Google Client Library with this API
+## Example of using the [JavaScript Google Client Library with this API][10]
 
 - `src/main/webapp/addFence.html` is an example of how to use the Google Maps JavaScript API [Drawing Layer][9] 
 to draw fences to the map and store them to your App Engines Datastore using the __add__ endpoint.
@@ -71,3 +75,5 @@ since this automatically creates indexes that are needed for our Datastore queri
 [7]: http://www.vividsolutions.com/jts/JTSHome.htm
 [8]: http://googledevelopers.blogspot.co.uk/
 [9]: https://developers.google.com/maps/documentation/javascript/drawinglayer
+[10]: https://developers.google.com/api-client-library/javascript/start/start-js
+[11]: https://cloud.google.com/appengine/docs/java/endpoints/gen_clients
