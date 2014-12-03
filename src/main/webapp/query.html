@@ -41,7 +41,7 @@
 
         function init(){
             //initialize geofencing api
-            var ROOT = 'https://'+window.location.host+'/_ah/api';
+            var ROOT = 'http://'+window.location.host+'/_ah/api';
             gapi.client.load('geofencing', 'v1', function() {
                 console.log('loaded')
             }, ROOT);
