@@ -34,8 +34,8 @@ For a detailed explanation of the architecture please refer to this [Google Deve
        iOS).
 
 1. Run the application with `mvn appengine:devserver`, and ensure it's
-   running by visiting your local server's api explorer's address (by
-   default [localhost:8080/_ah/api/explorer][5].)
+   running by visiting your local server (by
+   default [localhost:8080][5].)
 
 1. Get the client library with
 
@@ -64,7 +64,7 @@ since this automatically creates indexes that are needed for our Datastore queri
 [2]: http://java.com/en/
 [3]: https://developers.google.com/appengine/docs/java/endpoints/
 [4]: https://developers.google.com/appengine/docs/java/tools/maven
-[5]: http://localhost:8080/_ah/api/explorer
+[5]: http://localhost:8080/
 [6]: https://console.developers.google.com/
 [7]: http://www.vividsolutions.com/jts/JTSHome.htm
 [8]: http://googledevelopers.blogspot.co.uk/
