@@ -40,7 +40,8 @@
 
         function init(){
             //initialize geofencing api
-            var ROOT = window.location.protocol+'//'+window.location.host+'/_ah/api';
+            var protocol = (window.location.hostname == "localhost" || window.location.hostname == "127.0.0.1") ? "http:" : "https:";
+            var ROOT = protocol+'//'+window.location.host+'/_ah/api';
             gapi.client.load('geofencing', 'v1', function() {
                 console.log('loaded')
             }, ROOT);
