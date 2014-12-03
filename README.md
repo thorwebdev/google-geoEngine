@@ -39,7 +39,7 @@ For a detailed explanation of the architecture please refer to this [Google Deve
 
 1. Get the client library with
 
-   `$ mvnappengine:endpoints_get_client_lib`
+   `$ mvn appengine:endpoints_get_client_lib`
 
    It will generate a client library jar file under the
    `target/endpoints-client-libs/<api-name>/target` directory of your
@@ -49,6 +49,7 @@ For a detailed explanation of the architecture please refer to this [Google Deve
 1. Deploy your application to Google App Engine with
 
    `$ mvn appengine:update`
+   
    *Please note that you should always first test on the development server since that creates indexes for our datastore queries. Also after the first deployment App Engine takes a while to create the necessary indexes and connections, so if you get errors, just wait for a bit.*
    
 ## Example of using the JavaScript Google Client Library with this API
