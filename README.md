@@ -47,6 +47,7 @@ For a detailed explanation of the architecture please refer to this [Google Deve
    repository.
    
    For more information on client libraries see:
+   
    - [Generating Cleint Libraries][11]
    - [Client Library for JavaScript][10]
 
