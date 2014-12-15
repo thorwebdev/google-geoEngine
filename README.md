@@ -74,7 +74,7 @@ since this automatically creates indexes that are needed for our Datastore queri
 [5]: http://localhost:8080/
 [6]: https://console.developers.google.com/
 [7]: http://www.vividsolutions.com/jts/JTSHome.htm
-[8]: http://googledevelopers.blogspot.co.uk/
+[8]: http://googledevelopers.blogspot.com/2014/12/building-scalable-geofencing-api-on.html
 [9]: https://developers.google.com/maps/documentation/javascript/drawinglayer
 [10]: https://developers.google.com/api-client-library/javascript/start/start-js
 [11]: https://cloud.google.com/appengine/docs/java/endpoints/gen_clients
