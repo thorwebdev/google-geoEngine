@@ -56,8 +56,7 @@ public class MyIndex {
                 //Create polygon from the coordinates.
                 GeometryFactory fact = new GeometryFactory();
                 LinearRing linear = new GeometryFactory().createLinearRing(coordinates);
-                Polygon polygon = new Polygon(linear, null, fact);
-                polygon.setSRID((int) id);
+                MyPolygon polygon = new MyPolygon(linear, null, fact, id);
                 //Add polygon to index.
                 index.insert(polygon.getEnvelopeInternal(), polygon);
             }

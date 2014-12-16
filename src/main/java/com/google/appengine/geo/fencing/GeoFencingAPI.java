@@ -140,11 +140,11 @@ import javax.inject.Named;
         if (index != null) {
             Coordinate coord = new Coordinate(lng, lat);
             Point point = gf.createPoint(coord);
-            List < Polygon > items = index.query(point.getEnvelopeInternal());
+            List < MyPolygon > items = index.query(point.getEnvelopeInternal());
             if (!items.isEmpty()) {
-                for (Polygon poly: items) {
+                for (MyPolygon poly: items) {
                     if (poly.contains(point)) {
-                        long id = (long) poly.getSRID();
+                        long id = poly.getID();
                         MyFence newFence = new MyFence();
                         newFence.setId(id);
                         fences.add(newFence);
@@ -209,11 +209,11 @@ import javax.inject.Named;
             GeometryFactory fact = new GeometryFactory();
             LineString linestring = new GeometryFactory().createLineString(coordinates);
 
-            List < Polygon > items = index.query(linestring.getEnvelopeInternal());
+            List < MyPolygon > items = index.query(linestring.getEnvelopeInternal());
             if (!items.isEmpty()) {
-                for (Polygon poly: items) {
+                for (MyPolygon poly: items) {
                     if (linestring.crosses(poly) || poly.contains(linestring)) {
-                        long id = (long) poly.getSRID();
+                        long id = poly.getID();
                         MyFence newFence = new MyFence();
                         newFence.setId(id);
                         fences.add(newFence);
@@ -254,11 +254,11 @@ import javax.inject.Named;
             LinearRing linear = new GeometryFactory().createLinearRing(coordinates);
             Polygon polygon = new Polygon(linear, null, fact);
 
-            List < Polygon > items = index.query(polygon.getEnvelopeInternal());
+            List < MyPolygon > items = index.query(polygon.getEnvelopeInternal());
             if (!items.isEmpty()) {
-                for (Polygon poly: items) {
+                for (MyPolygon poly: items) {
                     if (polygon.contains(poly) || !polygon.disjoint(poly)) {
-                        long id = (long) poly.getSRID();
+                        long id = poly.getID();
                         MyFence newFence = new MyFence();
                         newFence.setId(id);
                         fences.add(newFence);
